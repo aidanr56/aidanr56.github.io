@@ -23,7 +23,7 @@ function draw_stickMan(app) {
 }
 
 
-function move_stickMan(){
+/*function move_stickMan(){
     if (sprite_stickMan.x > app.screen.width){
         sprite_stickMan.x = 0;
     }
@@ -53,6 +53,6 @@ function move_stickMan(){
         sprite_stickMan.x += 0;
         appInfo.map.tilePosition.x -= 5;
     }
-}
+}*/
 
-export {draw_stickMan, move_stickMan};
+export {sprite_stickMan, draw_stickMan};

@@ -13,8 +13,13 @@ const app = new PIXI.Application({ width: width, height: height });
 
 const texture = PIXI.Texture.from('../src/assets/FYPGameMap.png');
 const map = new PIXI.TilingSprite(texture, app.screen.width, app.screen.height);
-map.tilePosition.x = -200;
-map.tilePosition.y = -150;
+
+const position = {
+  posX: -200,
+  posY: -150
+}
+map.tilePosition.x = position.posX;
+map.tilePosition.y = position.posY;
 
 function createApplication(){
     document.body.appendChild(app.view);
@@ -35,7 +40,8 @@ const appInfo = {
   height: height,
   aspectRatio: aspectRatio,
   textStyle: textStyle,
-  map: map
+  map: map,
+  position: position
 }
 
 
