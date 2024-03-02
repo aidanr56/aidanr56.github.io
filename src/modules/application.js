@@ -9,10 +9,16 @@ const windowWidth = window.innerWidth;
 const width = windowWidth * 0.7;
 const aspectRatio = 16/9;
 const height = (1/aspectRatio) * width;
-const app = new PIXI.Application({ width: width, height: height, backgroundColor: 'green' });
+const app = new PIXI.Application({ width: width, height: height });
+
+const texture = PIXI.Texture.from('../src/assets/FYPGameMap.png');
+const map = new PIXI.TilingSprite(texture, app.screen.width, app.screen.height);
+map.tilePosition.x = -200;
+map.tilePosition.y = -150;
 
 function createApplication(){
     document.body.appendChild(app.view);
+    app.stage.addChild(map);
 }
 
 
@@ -29,6 +35,7 @@ const appInfo = {
   height: height,
   aspectRatio: aspectRatio,
   textStyle: textStyle,
+  map: map
 }
 
 

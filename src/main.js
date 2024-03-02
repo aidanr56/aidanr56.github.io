@@ -16,6 +16,7 @@ npc_1.set_data(npc_1_data);
 const keys = {};
 var keyPressed = false;
 
+
 window.addEventListener('keydown', (e) => {
     keys[e.key] = true;
 });

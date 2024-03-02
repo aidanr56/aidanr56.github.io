@@ -112,6 +112,7 @@ interaction.draw_text = function(NPC_text, numScreens) {
         this.app.stage.addChild(this.displayText);
 
         this.pageTracker.text = "1/1";
+        interaction.app.stage.addChild(this.pageTracker);
     }
 };
 

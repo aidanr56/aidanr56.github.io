@@ -38,16 +38,20 @@ function move_stickMan(){
     }
 
     if (keys['ArrowUp']) {
-        sprite_stickMan.y -= 5;
+        sprite_stickMan.y -= 0;
+        appInfo.map.tilePosition.y += 5;
     }
     if (keys['ArrowDown']) {
-        sprite_stickMan.y += 5;
+        sprite_stickMan.y += 0;
+        appInfo.map.tilePosition.y -= 5;
     }
     if (keys['ArrowLeft']) {
-        sprite_stickMan.x -= 5;
+        sprite_stickMan.x -= 0;
+        appInfo.map.tilePosition.x += 5;
     }
     if (keys['ArrowRight']) {
-        sprite_stickMan.x += 5;
+        sprite_stickMan.x += 0;
+        appInfo.map.tilePosition.x -= 5;
     }
 }
 
