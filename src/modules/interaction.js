@@ -43,7 +43,7 @@ interaction.calculate_numScreens = function(NPC_text){
     let interactionArea = (this.interactionHeight - (appInfo.height * 0.15)) * this.interactionWidth;
     let numScreens = Math.ceil(textArea/interactionArea);
 
-    return numScreens;
+    interaction.draw_text(NPC_text, numScreens);
 
 };
 

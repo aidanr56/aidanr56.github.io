@@ -8,6 +8,7 @@ const Collisions = {};
 
 Collisions.collisionsMap = [];
 Collisions.boundaries = [];
+Collisions.boundaries_coords = [];
 
 Collisions.position = {
     posX: 12 * 5.5,
@@ -26,13 +27,16 @@ Collisions.draw_collisionBoundary = function() {
         row.forEach((symbol, j) => {
             if (symbol === 1025){
                 const currentBox = new PIXI.Graphics();
-                currentBox.beginFill('red', 1);
-                currentBox.drawRect(j * 12 * 5.5 - 200, i * 12 * 5.5 - 150, 12 * 5.5, 12 * 5.5);
+                currentBox.beginFill('red', 0.2);
+                currentBox.drawRect(0, 0, 12 * 5.5, 12 * 5.5);
                 currentBox.endFill();
+
+                currentBox.position.set(j * 12 * 5.5 - 200, i * 12 * 5.5 - 150)
 
                 appInfo.app.stage.addChild(currentBox);
 
                 this.boundaries.push(currentBox);
+                this.boundaries_coords.push([j * 12 * 5.5 - 200, i * 12 * 5.5 - 150]);
             }
         })
     });
