@@ -60,34 +60,43 @@ npc.wrong_answer = function () {
 }
 
 npc.create_buttons = function(buttons) {
-    this.answer = buttons[0].text;
+    if(buttons[0].text === 'Continue'){
+        let current_button = new PIXI.Text("Continue");
+        current_button.x = interaction.x + interaction.interactionWidth/2 - current_button.width/2;
+        current_button.y = interaction.y - interaction.interactionHeight/2 - 50;
 
-    for (let i = buttons.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [buttons[i], buttons[j]] = [buttons[j], buttons[i]];
-        
-    }
-
-    for (let i = 0; i < buttons.length; i++) {
-        let current_button = new PIXI.Text(String(i + 1) + ". " + buttons[i].text, textStyle_standard);
-
-        current_button.x = interaction.x;
-        current_button.y = (i+1) * this.interactionHeight * 0.25;
         current_button.eventMode = 'static';
         current_button.buttonMode = true;
 
-        /*if (buttons[i].text === this.answer){
-            current_button.on('pointerdown', () => this.correct_answer());
-        }
-        else{
-            current_button.on('pointerdown', () => this.wrong_answer());
-        }*/
-        current_button.on('pointerdown', () => this.answer_selected(buttons[i]))
-        
-        this.button_holder.push(current_button);
-    }
+        current_button.on('pointerdown', () => this.run_interaction(this.data[buttons[0].nextNode]))
 
-    this.display_buttons();
+        this.button_holder.push(current_button);
+
+        appInfo.app.stage.addChild(current_button);
+
+    }
+    else{
+        for (let i = buttons.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [buttons[i], buttons[j]] = [buttons[j], buttons[i]];
+            
+        }
+
+        for (let i = 0; i < buttons.length; i++) {
+            let current_button = new PIXI.Text(String(i + 1) + ". " + buttons[i].text, textStyle_standard);
+
+            current_button.x = interaction.x;
+            current_button.y = (i+1) * this.interactionHeight * 0.25 + 50;
+            current_button.eventMode = 'static';
+            current_button.buttonMode = true;
+
+            current_button.on('pointerdown', () => this.answer_selected(buttons[i]))
+            
+            this.button_holder.push(current_button);
+        }
+
+        this.display_buttons();
+    }
 }
 
 
@@ -98,7 +107,6 @@ npc.display_buttons = function(){
 }
 
 npc.clear_buttons = function(){
-    console.log("clearing")
     for (let i = 0; i < this.button_holder.length; i++) {
         interaction.app.stage.removeChild(this.button_holder[i]);
     }
@@ -113,35 +121,35 @@ npc.NPC_clear_all = function(){
     appInfo.app.stage.removeChild(this.begin_button);
 }
 
-/*npc.reset_questionTracker = function() {
-    this.question_tracker = 1;
-}
-
-npc.run_interaction = function(){
-    let text_string = "text_" + String(this.question_tracker);
-    let question_string = "question_" + String(this.question_tracker);
-    interaction.draw_text(this.data[text_string], interaction.calculate_numScreens(this.data[text_string]));
-    this.create_buttons(this.data[question_string]);
-
-}*/
-
+npc.round_accuracy = 0;
+npc.round_length = 0;
 npc.answer_selected = function(response) {
     if (response.correct){
         player_1.accuracy.correct += 1;
         player_1.accuracy.questions_correct.push(response.text);
+
+        this.round_accuracy += 1;
     }
-    else{
+    else if (!response.correct){
         player_1.accuracy.incorrect += 1;
         player_1.accuracy.questions_incorrect.push(response.text);
     }
+    this.round_length += 1;
 
     this.clear_buttons();
-    this.run_interaction(response.nextNode);
+    this.run_interaction(this.data[response.nextNode]);
 }
 
 npc.run_interaction = function(current_node) {
-    let text = this.data[current_node].text;
-    let responses = this.data[current_node].responses;
+    console.log(current_node);
+    if (!this.data[0].interaction_complete){
+        let text = "Since you have already interacted with this character, you will not receive XP for this interaction."
+        let responses = [{text: "Continue", nextNode: 1}];
+        interaction.calculate_numScreens(text);
+        this.create_buttons(responses);    
+    }
+    let text = current_node.text;
+    let responses = current_node.responses;
     interaction.calculate_numScreens(text);
     this.create_buttons(responses);
 }
@@ -153,13 +161,40 @@ npc.beginInteraction_button = function() {
     this.begin_button.y = this.sprite.y - this.sprite.height;
     this.begin_button.eventMode = 'static';
     this.begin_button.buttonMode = true;
-    this.begin_button.on('pointerdown', () => this.run_interaction());
+    this.begin_button.on('pointerdown', () => this.run_interaction(this.data[1]));
 
     appInfo.app.stage.addChild(this.begin_button);
 }
 
 npc.remove_interactionButton = function() {
     appInfo.app.stage.removeChild(this.begin_button);
+}
+
+npc.end_interaction = function() {
+    interaction.INT_clear_all();
+    this.NPC_clear_all();
+
+    let ethics_xp_gain;
+    let explainable_xp_gain;
+    let data_xp_gain;
+
+    if (!this.data[0].interaction_complete){
+        ethics_xp_gain = (this.round_accuracy/this.round_length) * this.data[0].ethics_reward;
+        explainable_xp_gain = (this.round_accuracy/this.round_length) * this.data[0].explainability_reward;
+        data_xp_gain = (this.round_accuracy/this.round_length) * this.data[0].data_reward;
+    }
+    else{
+        ethics_xp_gain = 0;
+        explainable_xp_gain = 0;
+        data_xp_gain = 0;
+    }
+
+    this.data[0].interaction_complete = true;
+    
+    this.round_accuracy = 0;
+    this.round_length = 0;
+
+    return [ethics_xp_gain/100, explainable_xp_gain/100, data_xp_gain/100];
 }
 
 

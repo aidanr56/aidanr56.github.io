@@ -5,6 +5,7 @@ import {npc_1_data} from "./data/npc_data.js"
 import {npc} from "./modules/NPC.js";
 import { Collisions } from "./modules/collisions.js";
 import * as PIXI from "./libs/pixi.mjs";
+import { interaction } from "./modules/interaction.js";
 
 const { app } = appInfo
 
@@ -25,7 +26,7 @@ const npc_list = [];
 const npc_1 = Object.create(npc);
 npc_1.set_data(npc_1_data);
 npc_1.set_spriteLocation('../src/assets/gregory.png');
-npc_1.draw_sprite(300, 600, 100, 100);
+npc_1.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 50, 100, 100);
 npc_list.push(npc_1);
 
 
@@ -144,17 +145,22 @@ function distance_toNPC(current_npc) {
     if (c <= 10 && !in_interaction){
         current_npc.beginInteraction_button();
     }
-    else if (c > 10) {
-        current_npc.INT_clear_all();
-        current_npc.NPC_clear_all();
-        //current_npc.reset_questionTracker();
+    else if (c > 10 && in_interaction) {
+        const xp_gain = current_npc.end_interaction();
+        xp_tracker.update_ethics_XP_bar(xp_gain[0]);
+        xp_tracker.update_explainability_XP_bar(xp_gain[1]);
+        xp_tracker.update_data_XP_bar(xp_gain[2]);
+
         in_interaction = false;
+    }
+    else if (c > 10){
+        interaction.INT_clear_all();
+        current_npc.NPC_clear_all();
     }
 }
 
 
 xp_tracker.draw_xpBars();
-xp_tracker.update_ethics_XP_bar(0.3);
 
 let velocityX = 5;
 let velocityY = 5;
@@ -180,7 +186,7 @@ app.ticker.add(() => {
             in_interaction = true;
             current_npc.remove_interactionButton();
             current_npc.draw_interactionBox();
-            current_npc.run_interaction(1);
+            current_npc.run_interaction(current_npc.data[1]);
 
             keyPressed = true;
         }
