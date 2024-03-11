@@ -27,7 +27,7 @@ Collisions.draw_collisionBoundary = function() {
         row.forEach((symbol, j) => {
             if (symbol === 1025){
                 const currentBox = new PIXI.Graphics();
-                currentBox.beginFill('red', 0.2);
+                currentBox.beginFill('red', 0.01);
                 currentBox.drawRect(0, 0, 12 * 5.5, 12 * 5.5);
                 currentBox.endFill();
 

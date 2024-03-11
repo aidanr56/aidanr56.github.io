@@ -1,5 +1,5 @@
 import {appInfo, createApplication} from "./modules/application.js";
-import {stickMan} from "./modules/stick_man.js";
+import {stickMan, xp} from "./modules/stick_man.js";
 //import {interaction} from "./modules/interaction.js";
 import {npc_1_data} from "./data/npc_data.js"
 import {npc} from "./modules/NPC.js";
@@ -8,8 +8,8 @@ import * as PIXI from "./libs/pixi.mjs";
 
 const { app } = appInfo
 
-
 createApplication();
+
 
 const collision_map = Collisions;
 collision_map.create_collisionMap();
@@ -18,14 +18,16 @@ collision_map.draw_collisionBoundary();
 const stickMan_1 = Object.create(stickMan);
 stickMan_1.draw_stickMan(app);
 
+const xp_tracker = Object.create(xp);
 
 const npc_list = [];
 
 const npc_1 = Object.create(npc);
 npc_1.set_data(npc_1_data);
-npc_1.set_spriteLocation('../src/assets/stick-man-red.png');
-npc_1.draw_sprite();
+npc_1.set_spriteLocation('../src/assets/gregory.png');
+npc_1.draw_sprite(300, 600, 100, 100);
 npc_list.push(npc_1);
+
 
 let leftColliding = false;
 let rightColliding = false;
@@ -43,9 +45,11 @@ function collisionDetection(collisionBox) {
     let stick_height = stickMan_1.sprite_stickMan.height/2
     let stick_width = stickMan_1.sprite_stickMan.width/2
 
+    const buffer = 10;
+
     if (
         //left side of box
-        stick_x + stick_width + 5 > collisionBox.x &&
+        stick_x + stick_width + buffer > collisionBox.x &&
         stick_x + stick_width < collisionBox.x + collisionBox.width &&
         stick_y + stick_height > collisionBox.y &&
         stick_y - stick_height < collisionBox.y + (collisionBox.height)
@@ -59,7 +63,7 @@ function collisionDetection(collisionBox) {
     if (
         //right side of box
         stick_x - stick_width > collisionBox.x &&
-        stick_x - stick_width - 5 < collisionBox.x + collisionBox.width &&
+        stick_x - stick_width - buffer < collisionBox.x + collisionBox.width &&
         stick_y + stick_height > collisionBox.y &&
         stick_y - stick_height < collisionBox.y + (collisionBox.height)
     ) {
@@ -73,7 +77,7 @@ function collisionDetection(collisionBox) {
         //top side of box
         stick_x + stick_width > collisionBox.x &&
         stick_x - stick_width < collisionBox.x + collisionBox.width &&
-        stick_y + stick_height + 5 > collisionBox.y &&
+        stick_y + stick_height + buffer > collisionBox.y &&
         stick_y + stick_height < collisionBox.y + collisionBox.height
     ) {
         topColliding_detected = true;
@@ -86,7 +90,7 @@ function collisionDetection(collisionBox) {
         //bottom side of box
         stick_x + stick_width > collisionBox.x &&
         stick_x - stick_width < collisionBox.x + collisionBox.width &&
-        stick_y - stick_height - 5 < collisionBox.y + collisionBox.height &&
+        stick_y - stick_height - buffer < collisionBox.y + collisionBox.height &&
         stick_y - stick_height > collisionBox.y 
     ) {
         bottomColliding_detected = true;
@@ -97,10 +101,10 @@ function collisionDetection(collisionBox) {
 
     return (
         [[leftColliding_detected, rightColliding_detected, topColliding_detected, bottomColliding_detected],
-        stick_x + stick_width + 5 >= collisionBox.x &&
-        stick_x - stick_width - 5 <= collisionBox.x + collisionBox.width &&
-        stick_y - stick_height - 5 <= collisionBox.y + collisionBox.height &&
-        stick_y + stick_height + 5 >= collisionBox.y]
+        stick_x + stick_width + buffer >= collisionBox.x &&
+        stick_x - stick_width - buffer <= collisionBox.x + collisionBox.width &&
+        stick_y - stick_height - buffer <= collisionBox.y + collisionBox.height &&
+        stick_y + stick_height + buffer >= collisionBox.y]
     )
 }
 
@@ -149,6 +153,8 @@ function distance_toNPC(current_npc) {
 }
 
 
+xp_tracker.draw_xpBars();
+xp_tracker.update_ethics_XP_bar(0.3);
 
 let velocityX = 5;
 let velocityY = 5;
@@ -167,8 +173,6 @@ window.addEventListener('keyup', (e) => {
 });
 
 app.ticker.add(() => {
-    collisionLoop();
-
     npc_list.forEach((current_npc) => {
         distance_toNPC(current_npc);
 
@@ -185,6 +189,7 @@ app.ticker.add(() => {
 
     
     if (keys['ArrowUp'] && !(bottomColliding)) {
+        collisionLoop();
         appInfo.map.tilePosition.y += velocityY;
 
         collision_map.boundaries.forEach((collisionBox) => {
@@ -199,6 +204,7 @@ app.ticker.add(() => {
 
 
     else if (keys['ArrowDown'] && !(topColliding)) {
+        collisionLoop();
         appInfo.map.tilePosition.y -= velocityY;
 
         collision_map.boundaries.forEach((collisionBox) => {
@@ -213,6 +219,7 @@ app.ticker.add(() => {
 
 
     else if (keys['ArrowLeft'] && !(rightColliding)) {
+        collisionLoop();
         appInfo.map.tilePosition.x += velocityX;
 
         collision_map.boundaries.forEach((collisionBox) => {
@@ -227,6 +234,7 @@ app.ticker.add(() => {
 
 
     else if (keys['ArrowRight'] && !(leftColliding)) {
+        collisionLoop();
         appInfo.map.tilePosition.x -= velocityX;
 
         collision_map.boundaries.forEach((collisionBox) => {

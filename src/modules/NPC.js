@@ -17,11 +17,11 @@ npc.set_spriteLocation = function (location) {
     npc.sprite = PIXI.Sprite.from(location);
 }
 
-npc.draw_sprite = function () {
+npc.draw_sprite = function (x, y, width, height) {
     this.sprite.anchor.set(0.5, 0.5);
-    this.sprite.position.set(150, 50);
-    this.sprite.width = 25;
-    this.sprite.height = 60;
+    this.sprite.position.set(x, y);
+    this.sprite.width = width;
+    this.sprite.height = height;
     interaction.app.stage.addChild(this.sprite);
 }
 
