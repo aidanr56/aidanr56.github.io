@@ -96,7 +96,12 @@ const npc_1_data = [
     {
         node: 6,
         text: "That was correct, well done. This is a very primitive example of how an AI might work. Modern AI’s such as ChatGPT use vast “neural networks” that take into account millions of different parameters to make predictions. Don’t worry if this seems confusing, for now, it is time for you to begin your adventure. AI-landia is filled with helpful people, try talking to them, and I have no doubt you’ll learn something new!",
-        responses: []
+        responses: [
+            {
+                text: "Leave",
+                correct: null,
+            }
+        ]
     },
     {
         node: 7,
@@ -108,7 +113,7 @@ const npc_1_data = [
                 nextNode: 5
             }
         ]
-    }
+    },
 ]
 
 export { npc_1_data }

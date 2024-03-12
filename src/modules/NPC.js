@@ -63,17 +63,39 @@ npc.create_buttons = function(buttons) {
     if(buttons[0].text === 'Continue'){
         let current_button = new PIXI.Text("Continue");
         current_button.x = interaction.x + interaction.interactionWidth/2 - current_button.width/2;
-        current_button.y = interaction.y - interaction.interactionHeight/2 - 50;
+        current_button.y = interaction.y - interaction.interactionHeight * 0.2;
 
         current_button.eventMode = 'static';
         current_button.buttonMode = true;
 
-        current_button.on('pointerdown', () => this.run_interaction(this.data[buttons[0].nextNode]))
+        current_button.on('pointerdown', () => this.answer_selected(buttons[0]))
 
+        let button_box = new PIXI.Graphics;
+        button_box.beginFill('white', 0.8)
+        button_box.drawRoundedRect(current_button.x - 5, current_button.y, current_button.width + 10, current_button.height, 5);
+        button_box.endFill();
+
+        this.button_holder.push(button_box);
         this.button_holder.push(current_button);
+        
+    }
+    else if (buttons[0].text === 'Leave'){
+        let current_button = new PIXI.Text("Leave");
+        current_button.x = interaction.x + interaction.interactionWidth/2 - current_button.width/2;
+        current_button.y = interaction.y - interaction.interactionHeight * 0.2;
 
-        appInfo.app.stage.addChild(current_button);
+        current_button.eventMode = 'static';
+        current_button.buttonMode = true;
 
+        current_button.on('pointerdown', () => this.end_interaction());
+
+        let button_box = new PIXI.Graphics;
+        button_box.beginFill('white', 0.8)
+        button_box.drawRoundedRect(current_button.x - 5, current_button.y, current_button.width + 10, current_button.height, 5);
+        button_box.endFill();
+
+        this.button_holder.push(button_box);
+        this.button_holder.push(current_button);
     }
     else{
         for (let i = buttons.length - 1; i > 0; i--) {
@@ -91,12 +113,18 @@ npc.create_buttons = function(buttons) {
             current_button.buttonMode = true;
 
             current_button.on('pointerdown', () => this.answer_selected(buttons[i]))
+
+            let button_box = new PIXI.Graphics;
+            button_box.beginFill('white', 0.8)
+            button_box.drawRoundedRect(current_button.x - 5, current_button.y, current_button.width + 10, current_button.height, 5);
+            button_box.endFill();
+
+            this.button_holder.push(button_box);
             
             this.button_holder.push(current_button);
         }
-
-        this.display_buttons();
     }
+    this.display_buttons();
 }
 
 
@@ -124,13 +152,16 @@ npc.NPC_clear_all = function(){
 npc.round_accuracy = 0;
 npc.round_length = 0;
 npc.answer_selected = function(response) {
+    if (this.data[0].interaction_complete){
+        this.data[0].interaction_complete = false;
+    }
     if (response.correct){
         player_1.accuracy.correct += 1;
         player_1.accuracy.questions_correct.push(response.text);
 
         this.round_accuracy += 1;
     }
-    else if (!response.correct){
+    else if (response.correct === false){
         player_1.accuracy.incorrect += 1;
         player_1.accuracy.questions_incorrect.push(response.text);
     }
@@ -141,17 +172,18 @@ npc.answer_selected = function(response) {
 }
 
 npc.run_interaction = function(current_node) {
-    console.log(current_node);
-    if (!this.data[0].interaction_complete){
+    if (this.data[0].interaction_complete){
         let text = "Since you have already interacted with this character, you will not receive XP for this interaction."
-        let responses = [{text: "Continue", nextNode: 1}];
+        let responses = [{text: "Continue", correct: null, nextNode: 1}];
         interaction.calculate_numScreens(text);
         this.create_buttons(responses);    
     }
-    let text = current_node.text;
-    let responses = current_node.responses;
-    interaction.calculate_numScreens(text);
-    this.create_buttons(responses);
+    else{
+        let text = current_node.text;
+        let responses = current_node.responses;
+        interaction.calculate_numScreens(text);
+        this.create_buttons(responses);
+    }
 }
 
 npc.begin_button = new PIXI.Text("Press 'Enter' to talk.");
