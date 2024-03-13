@@ -1,11 +1,14 @@
 import {appInfo, createApplication} from "./modules/application.js";
 import {stickMan, xp} from "./modules/stick_man.js";
 //import {interaction} from "./modules/interaction.js";
-import {npc_1_data} from "./data/npc_data.js"
 import {npc} from "./modules/NPC.js";
 import { Collisions } from "./modules/collisions.js";
 import * as PIXI from "./libs/pixi.mjs";
 import { interaction } from "./modules/interaction.js";
+
+//npc data imports
+import {npc_1_data} from "./data/npc_data.js"
+import {data_privacy} from "./data/data_privacy.js"
 
 const { app } = appInfo
 
@@ -23,11 +26,19 @@ const xp_tracker = Object.create(xp);
 
 const npc_list = [];
 
-const npc_1 = Object.create(npc);
+const npc_1 = new npc;
 npc_1.set_data(npc_1_data);
 npc_1.set_spriteLocation('../src/assets/gregory.png');
 npc_1.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 50, 100, 100);
+npc_1.set_xpTracker(xp_tracker);
 npc_list.push(npc_1);
+
+const alan = new npc;
+alan.set_data(data_privacy);
+alan.set_spriteLocation('../src/assets/alan.png');
+alan.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 150, 100, 100);
+alan.set_xpTracker(xp_tracker);
+npc_list.push(alan);
 
 
 let leftColliding = false;
@@ -147,9 +158,7 @@ function distance_toNPC(current_npc) {
     }
     else if (c > 10 && in_interaction) {
         const xp_gain = current_npc.end_interaction();
-        xp_tracker.update_ethics_XP_bar(xp_gain[0]);
-        xp_tracker.update_explainability_XP_bar(xp_gain[1]);
-        xp_tracker.update_data_XP_bar(xp_gain[2]);
+        console.log(xp_gain);
 
         in_interaction = false;
     }
@@ -217,9 +226,12 @@ app.ticker.add(() => {
             collisionBox.y -= velocityY;
         });
 
-        npc_list.forEach((current_npc) => {
-            current_npc.move_y(-velocityY);
-        });
+        //npc_list.forEach((current_npc) => {
+            //current_npc.move_y(-velocityY);
+        //});
+
+        //alan.move_y(-velocityY);
+        npc_1.move_y(-velocityY);
 
     }
 

@@ -101,6 +101,10 @@ xp.update_data_XP_bar = function(new_size){
     appInfo.app.stage.addChild(this.ethics_XP_bar);
 }
 
+xp.get_xpBars = function() {
+    return [this.ethics_XP_bar, this.explainability_XP_bar, this.data_XP_bar]
+}
+
 
 
 

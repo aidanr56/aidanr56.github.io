@@ -7,9 +7,11 @@ import { player_data } from "../data/player_data.js";
 
 textStyle_standard.wordWrapWidth = interaction.interactionWidth;
 
+
 const player_1 = Object.create(player_data);
 
 const npc = Object.create(interaction);
+
 
 npc.sprite_location = "";
 npc.set_spriteLocation = function (location) {
@@ -43,6 +45,11 @@ npc.button_holder = [];
 npc.answer = "";
 npc.question_tracker = 1;
 npc.answer;
+
+npc.xp_tracker = null;
+npc.set_xpTracker = function (xp_tracker){
+    this.xp_tracker = xp_tracker;
+}
 
 npc.correct_answer = function () {
     console.log("Correct");
@@ -226,7 +233,9 @@ npc.end_interaction = function() {
     this.round_accuracy = 0;
     this.round_length = 0;
 
-    return [ethics_xp_gain/100, explainable_xp_gain/100, data_xp_gain/100];
+    this.xp_tracker.update_ethics_XP_bar(ethics_xp_gain/100);
+    this.xp_tracker.update_explainability_XP_bar(explainable_xp_gain/100);
+    this.xp_tracker.update_data_XP_bar(data_xp_gain/100);
 }
 
 
