@@ -12,15 +12,28 @@ const player_1 = Object.create(player_data);
 
 const npc = Object.create(interaction);
 
+npc.sprite;
+
+npc.anchor;
+
 
 npc.sprite_location = "";
 npc.set_spriteLocation = function (location) {
     this.sprite_location = location;
-    npc.sprite = PIXI.Sprite.from(location);
+    this.sprite = PIXI.Sprite.from(location);
+}
+
+npc.set_anchor = function (new_anchor){
+    this.anchor = new_anchor;
+}
+
+npc.set_initialPos = function(){
+    this.sprite.x = this.anchor.x - this.sprite.width/2;
+    this.sprite.y = this.anchor.y;
 }
 
 npc.draw_sprite = function (x, y, width, height) {
-    this.sprite.anchor.set(0.5, 0.5);
+    this.sprite.anchor.set(0, 0);
     this.sprite.position.set(x, y);
     this.sprite.width = width;
     this.sprite.height = height;
@@ -196,8 +209,8 @@ npc.run_interaction = function(current_node) {
 npc.begin_button = new PIXI.Text("Press 'Enter' to talk.");
 
 npc.beginInteraction_button = function() {
-    this.begin_button.x = this.sprite.x - (this.begin_button.width/2);
-    this.begin_button.y = this.sprite.y - this.sprite.height;
+    this.begin_button.x = this.sprite.x - (this.begin_button.width/2) + this.sprite.width/2;
+    this.begin_button.y = this.sprite.y - this.sprite.height*0.2;
     this.begin_button.eventMode = 'static';
     this.begin_button.buttonMode = true;
     this.begin_button.on('pointerdown', () => this.run_interaction(this.data[1]));

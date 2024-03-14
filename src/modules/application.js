@@ -23,8 +23,8 @@ map.tilePosition.x = position.posX;
 map.tilePosition.y = position.posY;
 
 function createApplication(){
-    document.body.appendChild(app.view);
-    app.stage.addChild(map);
+  document.body.appendChild(app.view);
+  app.stage.addChild(map);
 }
 
 function change_mapPos(x ,y) {
@@ -34,10 +34,10 @@ function change_mapPos(x ,y) {
 
 
 const textStyle = new PIXI.TextStyle({
-    fontFamily: 'Arial',
-    fontSize: 24,
-    wordWrap: true,
-    align: 'left',
+  fontFamily: 'Arial',
+  fontSize: 24,
+  wordWrap: true,
+  align: 'left',
 });
 
 const appInfo = {

@@ -17,10 +17,10 @@ window.addEventListener('keyup', (e) => {
 
 stickMan.draw_stickMan = function (app) {
     this.sprite_stickMan.anchor.set(0.5, 0.5);
-    this.sprite_stickMan.position.set(app.screen.width / 2, app.screen.height / 2 - 50);
+    this.sprite_stickMan.position.set(app.width / 2, app.height / 2 - 50);
     this.sprite_stickMan.width = 25;
     this.sprite_stickMan.height = 60;
-    app.stage.addChild(this.sprite_stickMan);
+    app.map.addChild(this.sprite_stickMan);
 }
 
 const xp = {}
