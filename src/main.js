@@ -1,8 +1,9 @@
-import {appInfo, createApplication} from "./modules/application.js";
+import {appInfo, change_mapPos, createApplication} from "./modules/application.js";
 import {stickMan, xp} from "./modules/stick_man.js";
 //import {interaction} from "./modules/interaction.js";
 import {npc} from "./modules/NPC.js";
 import { Collisions } from "./modules/collisions.js";
+import { Anchor } from "./modules/anchor_points.js";
 import * as PIXI from "./libs/pixi.mjs";
 import { interaction } from "./modules/interaction.js";
 
@@ -19,6 +20,18 @@ const collision_map = Collisions;
 collision_map.create_collisionMap();
 collision_map.draw_collisionBoundary();
 
+/*const anchor_map = Anchor;
+anchor_map.create_anchorMap();
+anchor_map.draw_anchorBoundary();*/
+
+
+//change_mapPos(-1750, -1540);
+//anchor_map.anchor_list[0].position.set(-1750, -1540);
+//console.log(anchor_map.anchor_list[0].position.x);
+
+/*change_mapPos(anchor_map.anchor_list[0].position.x, anchor_map.anchor_list[0].position.y);*/
+
+
 const stickMan_1 = Object.create(stickMan);
 stickMan_1.draw_stickMan(app);
 
@@ -26,17 +39,17 @@ const xp_tracker = Object.create(xp);
 
 const npc_list = [];
 
-const npc_1 = new npc;
+const npc_1 = Object.create(npc);
 npc_1.set_data(npc_1_data);
 npc_1.set_spriteLocation('../src/assets/gregory.png');
-npc_1.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 50, 100, 100);
+//npc_1.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 50, 100, 100);
 npc_1.set_xpTracker(xp_tracker);
 npc_list.push(npc_1);
 
-const alan = new npc;
+const alan = Object.create(npc);
 alan.set_data(data_privacy);
-alan.set_spriteLocation('../src/assets/alan.png');
-alan.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 150, 100, 100);
+alan.set_spriteLocation('../src/assets/Joseph.png');
+//alan.draw_sprite(app.screen.width / 2 - 50, app.screen.height / 2 - 150, 100, 100);
 alan.set_xpTracker(xp_tracker);
 npc_list.push(alan);
 
@@ -149,16 +162,19 @@ function collisionLoop() {
 let in_interaction = false;
 
 function distance_toNPC(current_npc) {
-    const a = Math.abs((current_npc.sprite.position.x - stickMan_1.sprite_stickMan.position.x)) ^ 2;
-    const b = Math.abs((current_npc.sprite.position.y - stickMan_1.sprite_stickMan.position.y)) ^ 2;
+    /*const a = Math.abs((current_npc.sprite.position.x - stickMan_1.sprite_stickMan.position.x)) ^ 2;
+    const b = Math.abs((current_npc.sprite.position.y - stickMan_1.sprite_stickMan.position.y)) ^ 2;*/
+
+    const a = Math.abs((collision_map.anchors[0].position.x - stickMan_1.sprite_stickMan.position.x)) ^ 2;
+    const b = Math.abs((collision_map.anchors[0].position.y - stickMan_1.sprite_stickMan.position.y)) ^ 2;
     const c = Math.sqrt(a + b);
     
     if (c <= 10 && !in_interaction){
+        console.log('hello');
         current_npc.beginInteraction_button();
     }
     else if (c > 10 && in_interaction) {
         const xp_gain = current_npc.end_interaction();
-        console.log(xp_gain);
 
         in_interaction = false;
     }
@@ -210,6 +226,9 @@ app.ticker.add(() => {
         collision_map.boundaries.forEach((collisionBox) => {
             collisionBox.y += velocityY;
         });
+        collision_map.anchors.forEach((collisionBox) => {
+            collisionBox.y += velocityY;
+        });
 
         npc_list.forEach((current_npc) => {
             current_npc.move_y(velocityY);
@@ -223,6 +242,9 @@ app.ticker.add(() => {
         appInfo.map.tilePosition.y -= velocityY;
 
         collision_map.boundaries.forEach((collisionBox) => {
+            collisionBox.y -= velocityY;
+        });
+        collision_map.anchors.forEach((collisionBox) => {
             collisionBox.y -= velocityY;
         });
 
@@ -243,6 +265,9 @@ app.ticker.add(() => {
         collision_map.boundaries.forEach((collisionBox) => {
             collisionBox.x += velocityX;
         });
+        collision_map.anchors.forEach((collisionBox) => {
+            collisionBox.x += velocityX;
+        });
 
         npc_list.forEach((current_npc) => {
             current_npc.move_x(velocityX);
@@ -256,6 +281,9 @@ app.ticker.add(() => {
         appInfo.map.tilePosition.x -= velocityX;
 
         collision_map.boundaries.forEach((collisionBox) => {
+            collisionBox.x -= velocityX;
+        });
+        collision_map.anchors.forEach((collisionBox) => {
             collisionBox.x -= velocityX;
         });
 
