@@ -1,4 +1,4 @@
-import {appInfo, change_mapPos, createApplication} from "./modules/application.js";
+import {appInfo, createApplication} from "./modules/application.js";
 import {stickMan, xp} from "./modules/stick_man.js";
 //import {interaction} from "./modules/interaction.js";
 import {npc} from "./modules/NPC.js";
