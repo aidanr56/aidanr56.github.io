@@ -57,7 +57,7 @@ npc_list.push(clemens);
 
 const joseph = Object.create(npc);
 joseph.set_data(data_privacy);
-joseph.set_spriteLocation('../src/assets/clemens.png');
+joseph.set_spriteLocation('../src/assets/joseph.png');
 joseph.draw_sprite(0, 0, 100, 100);
 joseph.set_xpTracker(xp_tracker);
 joseph.set_anchor(collision_map.joseph_anchor);
