@@ -28,7 +28,7 @@ interaction.screenCount = 1;
 
 
 interaction.draw_interactionBox = function() {
-    this.interactionBox.beginFill('gray', 1);
+    this.interactionBox.beginFill('white', 0.8);
     this.interactionBox.drawRect(this.x, this.y, this.interactionWidth, this.interactionHeight);
     this.interactionBox.endFill();
 

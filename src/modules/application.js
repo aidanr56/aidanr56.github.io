@@ -11,27 +11,33 @@ const aspectRatio = 16/9;
 const height = (1/aspectRatio) * width;
 const app = new PIXI.Application({ width: width, height: height });
 
-const texture = PIXI.Texture.from('../src/assets/FYPGameMap.png');
+const texture = PIXI.Texture.from('../src/assets/FYP_Map.png');
 const map = new PIXI.TilingSprite(texture, app.screen.width, app.screen.height);
 
 const position = {
-  posX: -200,
-  posY: -150
+  posX: 0,
+  posY: 0
 }
+
 map.tilePosition.x = position.posX;
 map.tilePosition.y = position.posY;
 
 function createApplication(){
-    document.body.appendChild(app.view);
-    app.stage.addChild(map);
+  document.body.appendChild(app.view);
+  app.stage.addChild(map);
+}
+
+function change_mapPos(x ,y) {
+ map.tilePosition.x = x;
+ map.tilePosition.y = y;
 }
 
 
 const textStyle = new PIXI.TextStyle({
-    fontFamily: 'Arial',
-    fontSize: 24,
-    wordWrap: true,
-    align: 'left',
+  fontFamily: 'Arial',
+  fontSize: 24,
+  wordWrap: true,
+  align: 'left',
 });
 
 const appInfo = {
@@ -45,4 +51,4 @@ const appInfo = {
 }
 
 
-export {appInfo, createApplication};
+export {appInfo, createApplication, change_mapPos};
