@@ -1,4 +1,4 @@
-const npc_1_data = [
+const welcome = [
     //xp requirements and rewards
     {   
         //requirements
@@ -15,7 +15,7 @@ const npc_1_data = [
     //node 1
     {
         node: 1,
-        text: "Welcome player to the game. Give them a very brief initial introduction to what AI is. AI refers to technology that enables computers and machines to simulate human-like intelligence, and often encompasses the field of machine and deep learning. This is accomplished by mathematically evaluating input data, and producing a corresponding prediction based on this For example, statistical algorithms, such as linear regression, may be used to find links between trends. Let's try an example, here is a table that shows the price of an apple and the weather for seven consecutive days:",
+        text: "Hi, my name is Sarah! Welcome player to the game. Give them a very brief initial introduction to what AI is. AI refers to technology that enables computers and machines to simulate human-like intelligence, and often encompasses the field of machine and deep learning. This is accomplished by mathematically evaluating input data, and producing a corresponding prediction based on this For example, statistical algorithms, such as linear regression, may be used to find links between trends. Let's try an example, here is a table that shows the price of an apple and the weather for seven consecutive days:",
         responses: [
             {
                 text: 'Continue',
@@ -116,4 +116,4 @@ const npc_1_data = [
     },
 ]
 
-export { npc_1_data }
+export { welcome }

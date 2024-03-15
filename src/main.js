@@ -7,11 +7,11 @@ import * as PIXI from "./libs/pixi.mjs";
 import { interaction } from "./modules/interaction.js";
 
 //npc data imports
-import {npc_1_data} from "./data/npc_data.js";
+import {npc_1_data} from "./data/welcome.js";
 import {data_privacy} from "./data/data_privacy.js";
+import { welcome } from "./data/welcome.js";
 
 //const app = appInfo
-
 createApplication();
 
 
@@ -64,7 +64,7 @@ joseph.set_anchor(collision_map.joseph_anchor);
 npc_list.push(joseph);
 
 const sarah = Object.create(npc);
-sarah.set_data(data_privacy);
+sarah.set_data(welcome);
 sarah.set_spriteLocation('../src/assets/sarah.png');
 sarah.draw_sprite(0, 0, 100, 100);
 sarah.set_xpTracker(xp_tracker);
