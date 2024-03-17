@@ -3,7 +3,6 @@ import { appInfo } from "./application.js";
 import * as PIXI from "../libs/pixi.mjs";
 
 
-
 const Collisions = {};
 
 //NPC Anchors
@@ -13,6 +12,7 @@ Collisions.joseph_anchor;
 Collisions.clemens_anchor;
 Collisions.tara_anchor;
 Collisions.sarah_anchor;
+Collisions.beck_anchor;
 
 Collisions.collisionsMap = [];
 Collisions.boundaries = [];
@@ -131,6 +131,20 @@ Collisions.draw_collisionBoundary = function() {
                 this.anchors.push(currentBox);
 
                 this.sarah_anchor = currentBox;
+            }
+            else if (symbol === 2065){
+                const currentBox = new PIXI.Graphics();
+                currentBox.beginFill('orange', 0.01);
+                currentBox.drawRect(0, 0, 12 * this.zoom, 12 * this.zoom);
+                currentBox.endFill();
+
+                currentBox.position.set(j * 12 * this.zoom, i * 12 * this.zoom)
+
+                appInfo.app.stage.addChild(currentBox);
+
+                this.anchors.push(currentBox);
+
+                this.beck_anchor = currentBox;
             }
         })
     });
